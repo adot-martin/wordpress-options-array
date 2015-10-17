@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: add settings with array
+  Plugin Name: options array
   Plugin URI: http://startupinacar.com
   Description: add settings with array options on a custom submenu
   Author: Me
@@ -107,7 +107,7 @@ function jc_callback_function(){
 function jc_filter_callback($args){
 
   $options = get_option( 'hello' );
-  //wp_die(var_dump($options));
+//  wp_die(var_dump($options));
     $html = '<input type="checkbox" id="filter_explicit_stuff" name="hello[filter_explicit_stuff]" value="1" ' . checked( 1, $options[ 'filter_explicit_stuff' ], false ) . '/>';
      
     $html .= '<label for="filter_explicit_stuff"> '  . $args[0] . '</label>';
@@ -127,6 +127,8 @@ function jc_filter_explicit_content( $content ) {
 
 function jc_change_text_to_blue_callback($args){
   $options = get_option( 'hello' );
+
+//  wp_die(var_dump($options));
 
   $html = '<input type="checkbox" id="change_text_to_blue" name="hello[change_text_to_blue]" value="1" ' . checked(1, $options[ 'change_text_to_blue' ], false ) . '/>';
   $html .= '<label for="change_text_to_blue"> ' . $args[0] . '</label>';
