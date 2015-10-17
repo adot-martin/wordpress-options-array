@@ -35,14 +35,6 @@ function jc_add_menu_render_admin(){
 
 
 
-//
-
-
-
-
-
-
-
 
 
 
@@ -56,16 +48,6 @@ add_action( 'admin_init', 'jc_settings_api_init' );
 
 
 function jc_settings_api_init(){
-
-  if( false == get_option( 'hello' ) || '' == get_option( 'hello' ) ) {
-
-    $options = array(
-      'filter_explicit_stuff' => '',
-      'change_text_to_blue'   => ''
-      );
-
-    update_option( 'hello', $options );
-  }
 
   add_settings_section(
     'general_settings_section',
@@ -96,7 +78,8 @@ function jc_settings_api_init(){
       )
     );
 
-  register_setting( 'hello', 'hello' );
+  register_setting( 'hello', 'filter_explicit_stuff' );
+  register_setting( 'hello', 'change_text_to_blue' );
 
 }
 
@@ -106,9 +89,7 @@ function jc_callback_function(){
 
 function jc_filter_callback($args){
 
-  $options = get_option( 'hello' );
-//  wp_die(var_dump($options));
-    $html = '<input type="checkbox" id="filter_explicit_stuff" name="hello[filter_explicit_stuff]" value="1" ' . checked( 1, $options[ 'filter_explicit_stuff' ], false ) . '/>';
+    $html = '<input type="checkbox" id="filter_explicit_stuff" name="filter_explicit_stuff" value="1" ' . checked( 1, get_option( 'filter_explicit_stuff' ), false ) . '/>';
      
     $html .= '<label for="filter_explicit_stuff"> '  . $args[0] . '</label>';
      
@@ -126,11 +107,8 @@ function jc_filter_explicit_content( $content ) {
 }
 
 function jc_change_text_to_blue_callback($args){
-  $options = get_option( 'hello' );
 
-//  wp_die(var_dump($options));
-
-  $html = '<input type="checkbox" id="change_text_to_blue" name="hello[change_text_to_blue]" value="1" ' . checked(1, $options[ 'change_text_to_blue' ], false ) . '/>';
+  $html = '<input type="checkbox" id="change_text_to_blue" name="change_text_to_blue" value="1" ' . checked(1, get_option( 'change_text_to_blue' ), false ) . '/>';
   $html .= '<label for="change_text_to_blue"> ' . $args[0] . '</label>';
 
   echo $html;
@@ -144,11 +122,10 @@ function add_text_color_change( $content ) {
 add_action( 'the_post', 'apply_changes_to_the_content' );
 
 function apply_changes_to_the_content(){
-  $options = get_option( 'hello' );
-  if( $options[ 'filter_explicit_stuff' ] ){
+  if( get_option( 'filter_explicit_stuff' ) ){
     add_filter( 'the_content', 'jc_filter_explicit_content' );
   }
-  if( $options[ 'change_text_to_blue' ] ){
+  if( get_option( 'change_text_to_blue' ) ){
     add_filter( 'the_content', 'add_text_color_change' );
   }
 
