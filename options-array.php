@@ -79,8 +79,7 @@ function jc_settings_api_init(){
       )
     );
 
-  register_setting( 'hello', 'filter_explicit_stuff' );
-  register_setting( 'hello', 'change_text_to_blue' );
+  register_setting( 'hello', 'hello' );
 
 }
 
@@ -89,21 +88,25 @@ function jc_callback_function(){
 }
 
 function jc_filter_callback($args){
+  $options = get_option( 'hello' );
 
-    $html = '<input type="checkbox" id="filter_explicit_stuff" name="filter_explicit_stuff" value="1" ' . checked( 1, get_option( 'filter_explicit_stuff' ), false ) . '/>';
+    $html = '<input type="checkbox" id="filter_explicit_stuff" name="hello[filter_explicit_stuff]" value="1" ' . checked( 1, isset( $options[ 'filter_explicit_stuff' ] ), false ) . '/>';
      
-    $html .= '<label for="filter_explicit_stuff"> '  . $args[0] . '</label>';
+    $html .= '<label for="hello[filter_explicit_stuff]"> '  . $args[0] . '</label>';
      
     echo $html;
+
+    var_dump($options);
 
 }
 
 
 
 function jc_change_text_to_blue_callback($args){
+  $options = get_option( 'hello' );
 
-  $html = '<input type="checkbox" id="change_text_to_blue" name="change_text_to_blue" value="1" ' . checked(1, get_option( 'change_text_to_blue' ), false ) . '/>';
-  $html .= '<label for="change_text_to_blue"> ' . $args[0] . '</label>';
+  $html = '<input type="checkbox" id="change_text_to_blue" name="hello[change_text_to_blue]" value="1" ' . checked(1, isset( $options[ 'change_text_to_blue' ] ), false ) . '/>';
+  $html .= '<label for="hello[change_text_to_blue]"> ' . $args[0] . '</label>';
 
   echo $html;
 
@@ -133,11 +136,12 @@ function add_text_color_change( $content ) {
 add_action( 'the_post', 'apply_changes_to_the_content' );
 
 function apply_changes_to_the_content(){
+  $options = get_option( 'hello' );
 
-  if( get_option( 'filter_explicit_stuff' ) ){
+  if( $options[ 'filter_explicit_stuff' ] ){
     add_filter( 'the_content', 'jc_filter_explicit_content' );
   }
-  if( get_option('change_text_to_blue') ){
+  if( $options['change_text_to_blue' ] ){
     add_filter( 'the_content', 'add_text_color_change' );
   }
 
