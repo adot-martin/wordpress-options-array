@@ -43,11 +43,12 @@ function jc_add_menu_render_admin(){
 
 
 
-
 add_action( 'admin_init', 'jc_settings_api_init' );
 
 
 function jc_settings_api_init(){
+
+ 
 
   add_settings_section(
     'general_settings_section',
@@ -94,7 +95,21 @@ function jc_filter_callback($args){
     $html .= '<label for="filter_explicit_stuff"> '  . $args[0] . '</label>';
      
     echo $html;
+
 }
+
+
+
+function jc_change_text_to_blue_callback($args){
+
+  $html = '<input type="checkbox" id="change_text_to_blue" name="change_text_to_blue" value="1" ' . checked(1, get_option( 'change_text_to_blue' ), false ) . '/>';
+  $html .= '<label for="change_text_to_blue"> ' . $args[0] . '</label>';
+
+  echo $html;
+
+}
+
+
 
 
 
@@ -106,26 +121,23 @@ function jc_filter_explicit_content( $content ) {
   exit;
 }
 
-function jc_change_text_to_blue_callback($args){
-
-  $html = '<input type="checkbox" id="change_text_to_blue" name="change_text_to_blue" value="1" ' . checked(1, get_option( 'change_text_to_blue' ), false ) . '/>';
-  $html .= '<label for="change_text_to_blue"> ' . $args[0] . '</label>';
-
-  echo $html;
-}
-
 function add_text_color_change( $content ) {
   $content = str_replace( '<p>', '<p style="color:blue;">', $content );
   return $content;
 }
 
+
+
+
+
 add_action( 'the_post', 'apply_changes_to_the_content' );
 
 function apply_changes_to_the_content(){
+
   if( get_option( 'filter_explicit_stuff' ) ){
     add_filter( 'the_content', 'jc_filter_explicit_content' );
   }
-  if( get_option( 'change_text_to_blue' ) ){
+  if( get_option('change_text_to_blue') ){
     add_filter( 'the_content', 'add_text_color_change' );
   }
 
